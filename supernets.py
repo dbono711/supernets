@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 from collections import defaultdict
 import fileinput
 import ipaddress
+import argparse
 import sys
 
 usage = """
@@ -60,17 +61,19 @@ def add_network_to_prefixes(network):
     prefixes[prefix].append(network)
 
 
-def process_input(argv):
+def process_input(subnets):
     """ Read each network from file and compare to the current supernet."""
-    for line in fileinput.input([x for x in argv[1:] if not x.startswith('-')]):
-        line = line.strip().encode().decode()  # Python 2/3 dual support.
-        if line == u'':
-            continue
-        try:
-            network = ipaddress.ip_network(line, strict=False)
-            add_network(network)
-        except ValueError:
-            print('!!! ', line, ' is not a valid network')
+    try:
+        with open(subnets) as data:
+            for net in data:
+                try:
+                    network = ipaddress.ip_network(net.strip().encode().decode(), strict=False)
+                    add_network(network)
+                except ValueError:
+                    print('!!!', net, ' is not a valid network')
+    except IOError:
+        print("File not found, goodbye!")
+        sys.exit(1)
 
 
 def process_prefixes(prefix=0):
@@ -120,26 +123,21 @@ def find_existing_supernet(network):
     return result
 
 
-def main(argv=None):
-    global networks
-    global verbose_output
-    if argv is None:
-        argv = sys.argv
-    if '-h' in argv or '--help' in argv:
-        print(usage)
-        return False
-    for arg in ('-v', '--verbose'):
-        if arg in argv:
-            argv.remove(arg)
-            verbose_output = True
-    process_input(argv)
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('subnetFile', nargs=1)
+    args = parser.parse_args()
+    subnets = args.subnetFile[0]
+    
+    process_input(subnets)
+    
     process_prefixes()
-    verbose_print("="*79, "\n")
+    
     for network in sorted(networks, key=lambda ip: ip.network_address.packed):
         print(network)
     
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
 
 
