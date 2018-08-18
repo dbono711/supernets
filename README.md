@@ -4,7 +4,7 @@ Given a list of IP networks, supernets will produce the smallest list<br>
 of contiguous supernets that aggregate all of those networks.
 
 ##### Usage: #####
-Supply the names of one of more files used for input.<br>
+Supply the names of one or more files used for input.<br>
 If no files are supplied, supernets will process standard input, <br>
 allowing you to pipe input from another programs output.<br>
 Each network must be on its own line and in CIDR format.<br>
@@ -33,7 +33,7 @@ allowing the two IP address formats to be directly comparable.<br>
     for network in sorted(networks, key=lambda ip: ip.network_address.packed):<br>
 
 
-Program Logic - This is how we do:<br>
+Program Logic - This is how we do it:<br>
 
 A global networks dictionary is created and all networks are added to it.<br>
 Using a dictionary prevents duplicate networks.<br>
