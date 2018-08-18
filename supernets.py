@@ -123,6 +123,7 @@ def main():
         "Each network must be on its own line and in CIDR format. "
         "supernets works with both IPv4 and IPv6 addresses.")
     parser.add_argument('subnetFile', nargs=1)
+    parser.add_argument('-m', '--maxprefixlen', type=int)
     args = parser.parse_args()
     subnets = args.subnetFile[0]
     
@@ -131,8 +132,16 @@ def main():
     process_prefixes()
     
     for network in sorted(networks, key=lambda ip: ip.network_address.packed):
-        print(network)
-    
+        if args.maxprefixlen:
+            if network.prefixlen < args.maxprefixlen:
+                small_supers = list(network.subnets(new_prefix=16))
+                for new_super in small_supers:
+                    print(new_super)
+            else:
+                print(network)
+        else:
+            print(network)
+
 
 if __name__ == "__main__":
     main()
