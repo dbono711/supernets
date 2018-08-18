@@ -12,14 +12,6 @@ import ipaddress
 import argparse
 import sys
 
-usage = """
-Usage: 
-Supply the names of one of more files used for input. 
-If no files are supplied, supernets will process standard input, 
-allowing you to pipe input from another programs output. 
-Each network must be on its own line and in CIDR format. 
-supernets works with both IPv4 and IPv6 addresses.
-"""
 
 # define globals
 networks = dict()
@@ -124,7 +116,12 @@ def find_existing_supernet(network):
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Supply the names of one of more files used for input. " 
+        "If no files are supplied, supernets will process standard input, "
+        "allowing you to pipe input from another programs output. "
+        "Each network must be on its own line and in CIDR format. "
+        "supernets works with both IPv4 and IPv6 addresses.")
     parser.add_argument('subnetFile', nargs=1)
     args = parser.parse_args()
     subnets = args.subnetFile[0]
