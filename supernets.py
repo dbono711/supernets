@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-"""
-
-"""
+"""Docstring missing."""
 
 from __future__ import absolute_import
 from __future__ import division
