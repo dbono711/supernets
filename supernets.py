@@ -59,7 +59,8 @@ def process_input(subnets):
         with open(subnets) as data:
             for net in data:
                 try:
-                    network = ipaddress.ip_network(net.strip().encode().decode(), strict=False)
+                    network = ipaddress.ip_network(net.strip().encode() \
+                        .decode(), strict=False)
                     add_network(network)
                 except ValueError:
                     print('!!!', net, ' is not a valid network')
