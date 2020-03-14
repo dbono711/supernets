@@ -7,7 +7,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from collections import defaultdict
-import fileinput
 import ipaddress
 import argparse
 import sys
@@ -59,8 +58,8 @@ def process_input(subnets):
         with open(subnets) as data:
             for net in data:
                 try:
-                    network = ipaddress.ip_network(net.strip().encode() \
-                        .decode(), strict=False)
+                    network = ipaddress.ip_network(
+                        net.strip().encode().decode(), strict=False)
                     add_network(network)
                 except ValueError:
                     print('!!!', net, ' is not a valid network')
@@ -95,8 +94,8 @@ def compare_networks_of_same_prefix_length(prefix_list):
             if supernet1 == supernet2:
                 add_network(supernet1)
                 delete_network(previous_net, current_net)
-                verbose_print("%s and %s aggregate to %s"
-                    % (previous_net, current_net, supernet1))
+                verbose_print("%s and %s aggregate to %s" % (
+                    previous_net, current_net, supernet1))
                 previous_net = None
             else:
                 verbose_print("%s is unique" % (previous_net))
@@ -118,7 +117,7 @@ def find_existing_supernet(network):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Supply the names of one of more files used for input. " 
+        description="Supply the names of one of more files used for input. "
         "If no files are supplied, supernets will process standard input, "
         "allowing you to pipe input from another programs output. "
         "Each network must be on its own line and in CIDR format. "
@@ -127,11 +126,11 @@ def main():
     parser.add_argument('-m', '--maxprefixlen', type=int)
     args = parser.parse_args()
     subnets = args.subnetFile[0]
-    
+
     process_input(subnets)
-    
+
     process_prefixes()
-    
+
     for network in sorted(networks, key=lambda ip: ip.network_address.packed):
         if args.maxprefixlen:
             if network.prefixlen < args.maxprefixlen:
@@ -146,5 +145,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
