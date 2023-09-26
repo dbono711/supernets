@@ -1,9 +1,9 @@
 # supernets
 
-Given a list of IP networks, supernets will produce the smallest list of contiguous supernets that aggregate all of those networks.
+Given a list of IP networks, this command line application will produce the smallest list of contiguous supernets that aggregate all of those networks.
 
 ## Usage
-Supply the path of file containing IPv4 or IPv6 subnets in CIDR notation (i.e., '216.58.192.0/24'). Each network must be on its own line.
+Supply the path of a file containing IPv4 or IPv6 subnets in CIDR notation (i.e., '216.58.192.0/24'). Each network must be on its own line.
 
 `-h, --help     ` displays help.<br>
 
